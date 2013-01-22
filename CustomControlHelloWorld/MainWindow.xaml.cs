@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace CustomControlHelloWorld
 {
@@ -23,6 +24,20 @@ namespace CustomControlHelloWorld
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void BtnOpenXapFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+                {
+                    Filter = "XAP files (*.xap)|*.xap"
+                };
+
+            if (openFileDialog.ShowDialog().Value)
+            {
+                SelectedXapFile.Text = openFileDialog.FileName;
+            }
+
         }
     }
 }
