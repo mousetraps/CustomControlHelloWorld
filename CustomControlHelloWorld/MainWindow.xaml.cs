@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
+using CustomControlHelloWorld.Annotations;
 
 namespace CustomControlHelloWorld
 {
@@ -21,23 +10,41 @@ namespace CustomControlHelloWorld
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ViewModel _viewModel = new ViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = _viewModel;
         }
 
-        private void BtnOpenXapFile_OnClick(object sender, RoutedEventArgs e)
+        private void Window_Loaded_1(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog()
-                {
-                    Filter = "XAP files (*.xap)|*.xap"
-                };
+            _viewModel.SelectedFile = "No file selected";
+        }
 
-            if (openFileDialog.ShowDialog().Value)
-            {
-                SelectedXapFile.Text = openFileDialog.FileName;
+    }
+
+    public class ViewModel : INotifyPropertyChanged
+    {
+        private string _selectedFile;
+        public string SelectedFile
+        {
+            get { return _selectedFile; }
+            set {
+                _selectedFile = value;
+                OnPropertyChanged();
             }
+        }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
 }
